@@ -7,18 +7,18 @@ const API_BASE = process.env.API_BASE!
 export const startScanTool = {
   name: 'start_scan',
   description:
-    'Upload ZIP → démarre un scan et renvoie { success, scanId, detectedLanguages }',
+    'Upload ZIP → starts a scan and returns { success, scanId, detectedLanguages }',
   inputSchema: {
     type: 'object',
     properties: {
-      projectId:        { type: 'string', description: 'UUID du projet' },
+      projectId:        { type: 'string', description: 'Project UUID' },
       fileName:         { type: 'string' },
       fileBufferBase64: { type: 'string' }
     },
     required: ['projectId', 'fileName', 'fileBufferBase64']
   },
 
-  /** Lance le scan et renvoie { success, scanId, detectedLanguages } */
+  /** Starts the scan and returns { success, scanId, detectedLanguages } */
   async run(params: any, clientHeaders: Record<string, string | undefined>) {
     const { projectId, fileName, fileBufferBase64 } = params
 
@@ -39,7 +39,7 @@ export const startScanTool = {
       }
     )
 
-    // L’API renvoie StartScanResponseDto : { success, message:<scanId>, … }
+    // The API returns StartScanResponseDto : { success, message:<scanId>, … }
     const { success, message, detectedLanguages } = res.data
     return { success, scanId: message, detectedLanguages }
   }

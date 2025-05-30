@@ -4,7 +4,7 @@ import app from '../dist/server.js'
 const request = supertest(app)
 
 describe('JSON-RPC /rpc', () => {
-    it('list_tools → renvoie un tableau', async () => {
+    it('list_tools → returns an array', async () => {
         const res = await request
             .post('/rpc')
             .send({ jsonrpc: '2.0', id: 1, method: 'list_tools', params: {} })
@@ -13,7 +13,7 @@ describe('JSON-RPC /rpc', () => {
         expect(res.body.result.tools.length).toBeGreaterThan(0)
     })
 
-    it('call_tool inconnu → erreur -32603', async () => {
+    it('call_tool unknown → error -32603', async () => {
         const res = await request
             .post('/rpc')
             .send({

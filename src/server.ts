@@ -13,7 +13,7 @@ app.use(express.json({ limit: '20mb' }))
 app.post('/rpc', (async (req: Request, res: Response) => {
   const { jsonrpc, id, method, params = {} } = req.body ?? {}
 
-  /* Validation minimale */
+  /* Minimal validation */
   if (jsonrpc !== '2.0') {
     res.status(400).json(err(null, -32600, 'Not JSON-RPC 2.0'))
     return
@@ -55,7 +55,7 @@ app.post('/rpc', (async (req: Request, res: Response) => {
 
 /* ------------------------------------------------------------------ */
 app.listen(PORT, () =>
-  console.log(`✅ MCP HTTP (JSON-RPC) prêt sur http://localhost:${PORT}/rpc`)
+  console.log(`✅ MCP HTTP (JSON-RPC) ready on http://localhost:${PORT}/rpc`)
 )
 
 export default app

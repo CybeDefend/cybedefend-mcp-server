@@ -1,10 +1,10 @@
-// Setup pour les tests
+// Setup for tests
 import { config } from 'dotenv'
 
-// Charger les variables d'environnement de test
+// Load test environment variables
 config({ path: '.env.test' })
 
-// Configuration par défaut pour éviter les erreurs
+// Default configuration to avoid errors
 if (!process.env.API_BASE) {
   process.env.API_BASE = 'https://api.example.com'
 }

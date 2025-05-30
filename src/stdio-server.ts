@@ -1,6 +1,6 @@
 /**
- * STDIO entry-point pour les agents MCP (Cursor, Claude, etc.)
- * Lance un Server du SDK et délègue la logique aux tools existants.
+ * STDIO entry-point for MCP agents (Cursor, Claude, etc.)
+ * Starts a Server from the SDK and delegates logic to existing tools.
  *
  * Build : `npm run build`
  * Run   : `node dist/stdio-server.js`
@@ -14,14 +14,14 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 
 import { listTools, callTool } from './toolbox.js'
 
-/** Construit puis connecte le serveur MCP sur STDIO. */
+/** Builds then connects the MCP server on STDIO. */
 export async function runStdio() {
   const server = new Server(
     { name: 'Cybedefend MCP', version: '2.0.0' },
     { capabilities: { tools: {} } },
   )
 
-  /* ----- handlers JSON-RPC fournis par le SDK ------------------- */
+  /* ----- JSON-RPC handlers provided by the SDK ------------------- */
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
     tools: await listTools(),
   }))
@@ -33,11 +33,12 @@ export async function runStdio() {
   })
   /* -------------------------------------------------------------- */
 
-  /* Connexion STDIO : bloque tant que le processus vit */
+  /* STDIO Connection : blocks while the process lives */
   await server.connect(new StdioServerTransport())
 }
 
 /* Point d’entrée si exécuté comme script */
+/* Entry point if executed as script */
 if (import.meta.url === `file://${process.argv[1]}`) {
   runStdio().catch((e) => {
     console.error('❌ MCP STDIO fatal :', e)

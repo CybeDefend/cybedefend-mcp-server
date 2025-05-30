@@ -5,7 +5,7 @@ const API_BASE = process.env.API_BASE!
 
 export const getScanTool = {
   name: 'get_scan',
-  description: 'Renvoie l’état courant d’un scan (progress, vulnérabilités…).',
+  description: 'Returns the current state of a scan (progress, vulnerabilities…).',
   inputSchema: {
     type: 'object',
     properties: {

@@ -3,12 +3,12 @@ import { forwardAuth } from '../utils/forwardAuth.js'
 
 const API_BASE            = process.env.API_BASE!
 const DEFAULT_INTERVAL_MS = 10_000   // 10 s
-const MAX_WAIT_MS         = 30 * 60_000 // 30 min de patience max
+const MAX_WAIT_MS         = 30 * 60_000 // 30 min max wait time
 
 export const waitScanTool = {
   name: 'wait_scan_complete',
   description:
-    'Attend la fin d’un scan (completed|failed) en pollant toutes les 10 s.',
+    'Waits for a scan to finish (completed|failed) by polling every 10 s.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -20,7 +20,7 @@ export const waitScanTool = {
     required: ['projectId', 'scanId']
   },
 
-  /** Boucle de polling jusqu’à état final */
+  /** Polling loop until final state */
   async run(params: any, clientHeaders: Record<string, string | undefined>) {
     const {
       projectId,
