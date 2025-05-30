@@ -1,52 +1,61 @@
 import 'dotenv/config'
-import express, { Request, Response } from 'express'
-import { startScanTool }  from './tools/startScan.js'
-import { getScanTool }    from './tools/getScan.js'
-import { waitScanTool }   from './tools/waitScanComplete.js'
+import express, { Request, Response, RequestHandler } from 'express'
+
+import { listTools, callTool } from './toolbox.js'
+import { ok, err }            from './rpc/helpers.js'
 
 const PORT = Number(process.env.PORT ?? 4001)
 const app  = express()
 
 app.use(express.json({ limit: '20mb' }))
 
-/* -------- /tools/list --------------------------------------------- */
-app.post('/tools/list', (_req: Request, res: Response) => {
-  const tools = [startScanTool, getScanTool, waitScanTool].map(t => ({
-    name: t.name,
-    description: t.description,
-    inputSchema: t.inputSchema
-  }))
-  res.json({ tools })
-})
+/* -------- JSON-RPC 2.0 endpoint ---------------------------------- */
+app.post('/rpc', (async (req: Request, res: Response) => {
+  const { jsonrpc, id, method, params = {} } = req.body ?? {}
 
-/* -------- /tools/call --------------------------------------------- */
-app.post('/tools/call', async (req: Request, res: Response) => {
-  const { name, arguments: params } = req.body ?? {}
-  const headers = Object.fromEntries(
-    Object.entries(req.headers).map(([k, v]) => [k.toLowerCase(), String(v)])
-  )
-
-  const toolbox: Record<string, any> = {
-    start_scan         : startScanTool,
-    get_scan           : getScanTool,
-    wait_scan_complete : waitScanTool
+  /* Validation minimale */
+  if (jsonrpc !== '2.0') {
+    res.status(400).json(err(null, -32600, 'Not JSON-RPC 2.0'))
+    return
   }
-
-  const tool = toolbox[name]
-  if (!tool) {
-    res.status(400).json({ error: `Unknown tool: ${name}` })
+  if (typeof id !== 'number') {
+    res.status(400).json(err(null, -32600, '"id" must be number'))
     return
   }
 
   try {
-    const result = await tool.run(params, headers)
-    res.json({ content: [{ type: 'json', json: result }] })
-  } catch (err: any) {
-    console.error(err)
-    res.status(500).json({ error: err.message ?? 'internal_error' })
-  }
-})
+    switch (method) {
+      case 'list_tools': {
+        const tools = listTools()
+        res.json(ok(id, { tools }))
+        return
+      }
 
+      case 'call_tool': {
+        /** params = { name, arguments } */
+        const normalizedHeaders = Object.fromEntries(
+          Object.entries(req.headers).map(([k, v]) => [
+            k, 
+            Array.isArray(v) ? v[0] : v
+          ])
+        )
+        const result = await callTool(params, normalizedHeaders)
+        res.json(ok(id, { content: [{ type: 'json', json: result }] }))
+        return
+      }
+
+      default:
+        res.status(400).json(err(id, -32601, 'Method not found'))
+        return
+    }
+  } catch (e: any) {
+    res.status(500).json(err(id, -32603, e.message ?? 'internal_error'))
+  }
+}) as RequestHandler)
+
+/* ------------------------------------------------------------------ */
 app.listen(PORT, () =>
-  console.log(`✅ MCP HTTP prêt sur http://localhost:${PORT}`)
+  console.log(`✅ MCP HTTP (JSON-RPC) prêt sur http://localhost:${PORT}/rpc`)
 )
+
+export default app

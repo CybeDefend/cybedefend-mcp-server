@@ -11,13 +11,18 @@ async function main() {
 
   // 2) Construction du JSON-RPC
   const payload = {
-    name: 'start_scan',
-    arguments: {
-      projectId: 'b08314da-b9ed-4e53-81ff-5d8fc0796951',
-      fileName: 'vulpy1.zip',
-      fileBufferBase64: base64
+    jsonrpc: '2.0',
+    id: 1,
+    method: 'call_tool',
+    params: {
+      name: 'start_scan', arguments: {
+        projectId: 'b08314da-b9ed-4e53-81ff-5d8fc0796951',
+        fileName: 'vulpy1.zip',
+        fileBufferBase64: base64
+      }
     }
   }
+
 
   // 3) Appel HTTP
   try {

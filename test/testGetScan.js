@@ -12,8 +12,13 @@ async function main() {
 
   // 2) Prépare la requête JSON-RPC
   const payload = {
-    name: 'get_scan',
-    arguments: { projectId, scanId }
+    jsonrpc: '2.0',
+    id: 1,
+    method: 'call_tool',
+    params: {
+      name: 'get_scan',
+      arguments: { projectId, scanId }
+    }
   }
 
   // 3) Appelle le MCP Server

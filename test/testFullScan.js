@@ -6,16 +6,24 @@ import 'dotenv/config'
 import fs from 'fs'
 import axios from 'axios'
 
-async function sleep (ms) { return new Promise(r => setTimeout(r, ms)) }
+async function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
 
-async function startScan (projectId, zipPath) {
+async function startScan(projectId, zipPath) {
   const base64 = fs.readFileSync(zipPath).toString('base64')
 
   const { data } = await axios.post(
     `${process.env.MCP_SERVER}/tools/call`,
     {
-      name: 'start_scan',
-      arguments: { projectId, fileName: zipPath, fileBufferBase64: base64 }
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'call_tool',
+      params: {
+        name: 'start_scan', arguments: {
+          projectId: 'b08314da-b9ed-4e53-81ff-5d8fc0796951',
+          fileName: 'vulpy1.zip',
+          fileBufferBase64: base64
+        }
+      }
     },
     { headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.MY_API_KEY } }
   )
@@ -25,9 +33,9 @@ async function startScan (projectId, zipPath) {
   return scanId
 }
 
-async function pollScan (projectId, scanId, intervalSec, maxWaitMin) {
+async function pollScan(projectId, scanId, intervalSec, maxWaitMin) {
   const intervalMs = intervalSec * 1_000
-  const deadline   = Date.now() + maxWaitMin * 60_000
+  const deadline = Date.now() + maxWaitMin * 60_000
   let attempt = 0
 
   while (Date.now() < deadline) {
@@ -35,8 +43,13 @@ async function pollScan (projectId, scanId, intervalSec, maxWaitMin) {
     const { data } = await axios.post(
       `${process.env.MCP_SERVER}/tools/call`,
       {
-        name: 'get_scan',
-        arguments: { projectId, scanId }
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'call_tool',
+        params: {
+          name: 'get_scan',
+          arguments: { projectId, scanId }
+        }
       },
       { headers: { 'Content-Type': 'application/json', 'x-api-key': process.env.MY_API_KEY } }
     )
@@ -59,8 +72,8 @@ async function pollScan (projectId, scanId, intervalSec, maxWaitMin) {
   const [zipFile = 'vulpy1.zip', interval = '10', maxWait = '30'] = process.argv.slice(2)
   const projectId = 'b08314da-b9ed-4e53-81ff-5d8fc0796951'
 
-  const scanId  = await startScan(projectId, zipFile)
-  const result  = await pollScan(projectId, scanId, Number(interval), Number(maxWait))
+  const scanId = await startScan(projectId, zipFile)
+  const result = await pollScan(projectId, scanId, Number(interval), Number(maxWait))
 
   console.log('🏁 Résultat final →', JSON.stringify(result, null, 2))
 })().catch(err => {
