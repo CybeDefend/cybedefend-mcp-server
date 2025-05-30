@@ -26,7 +26,7 @@ app.post('/rpc', (async (req: Request, res: Response) => {
   try {
     switch (method) {
       case 'list_tools': {
-        const tools = listTools()
+        const tools = await listTools()
         res.json(ok(id, { tools }))
         return
       }

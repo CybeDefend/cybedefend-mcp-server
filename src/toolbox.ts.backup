@@ -1,0 +1,43 @@
+import { buildOpenApiServer } from "./openapi-server.js"
+import { getScanTool } from "./tools/getScan.js"
+import { startScanTool } from "./tools/startScan.js"
+import { waitScanTool } from "./tools/waitScanComplete.js"
+
+const apiSrv = buildOpenApiServer()
+
+/* ---------- list_tools ----------------------------------------- */
+export async function listTools() {
+  const auto   = (await apiSrv.getTools()).map((t: any) => ({
+    name        : t.name,
+    description : t.description,
+    inputSchema : t.inputSchema,
+  }))
+  const manual = [startScanTool, getScanTool, waitScanTool].map(t => ({
+    name: t.name, description: t.description, inputSchema: t.inputSchema,
+  }))
+  return [...auto, ...manual]
+}
+
+/* ---------- call_tool ------------------------------------------ */
+export async function callTool(
+  params: { name?: string; arguments?: any },
+  headers: Record<string,string|undefined>,
+) {
+  const { name, arguments: args = {} } = params ?? {}
+  if (!name) throw new Error("Missing \"name\"")
+
+  /* 1. tools maison */
+  const custom: Record<string, any> = {
+    start_scan: startScanTool,
+    get_scan  : getScanTool,
+    wait_scan_complete: waitScanTool,
+  }
+  if (custom[name]) return custom[name].run(args, headers)
+
+  /* 2. endpoints OpenAPI */
+  const { content } = await apiSrv.callTool({
+    name,
+    arguments: args,
+  })
+  return content?.[0]?.json ?? content?.[0]?.text
+}

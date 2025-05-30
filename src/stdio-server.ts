@@ -23,7 +23,7 @@ export async function runStdio() {
 
   /* ----- handlers JSON-RPC fournis par le SDK ------------------- */
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: listTools(),
+    tools: await listTools(),
   }))
 
   server.setRequestHandler(CallToolRequestSchema, async (req) => {
