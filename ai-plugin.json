@@ -1,0 +1,19 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Cybedefend Security MCP",
+  "name_for_model": "cybedefend_mcp",
+  "description_for_human": "Contrôle et base les scans de sécurité via MCP",
+  "description_for_model": "Plugin MCP pour démarrer et vérifier des scans de sécurité.",
+  "auth": {
+    "type": "api_key",
+    "in": "header",
+    "name": "x-api-key"
+  },
+  "api": {
+    "type": "mcp",
+    "url": "http://localhost:4001"
+  },
+  "logo_url": "https://mon.site/logo.png",
+  "contact_email": "support@cybedefend.com",
+  "legal_info_url": "https://cybedefend.com/legal"
+}
