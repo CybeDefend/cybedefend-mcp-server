@@ -4,7 +4,7 @@ import express, { Request, Response, RequestHandler } from 'express'
 import { listTools, callTool } from './toolbox.js'
 import { ok, err }            from './rpc/helpers.js'
 
-const PORT = Number(process.env.PORT ?? 4001)
+const MCP_SERVER = process.env.MCP_SERVER ?? 'http://localhost:4001'
 const app  = express()
 
 app.use(express.json({ limit: '20mb' }))
@@ -55,7 +55,7 @@ app.post('/rpc', (async (req: Request, res: Response) => {
 
 /* ------------------------------------------------------------------ */
 app.listen(PORT, () =>
-  console.log(`✅ MCP HTTP (JSON-RPC) ready on http://localhost:${PORT}/rpc`)
+  console.log(`✅ MCP HTTP (JSON-RPC) ready on ${MCP_SERVER}/rpc`)
 )
 
 export default app
