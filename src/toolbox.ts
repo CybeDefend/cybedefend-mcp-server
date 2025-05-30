@@ -2,10 +2,10 @@ import { startScanTool } from './tools/startScan.js'
 import { getScanTool }   from './tools/getScan.js'
 import { waitScanTool }  from './tools/waitScanComplete.js'
 
-/** Tools personnalisés connus du serveur */
+/** Custom tools known by the server */
 const CUSTOM_TOOLS = [startScanTool, getScanTool, waitScanTool]
 
-/** Instance singleton du serveur OpenAPI */
+/** OpenAPI server singleton instance */
 let apiServer: any = null
 
 /**
@@ -59,7 +59,7 @@ function parseHeaders(h?: string): Record<string,string> {
 }
 
 /**
- * Initialise le serveur OpenAPI si nécessaire
+ * Initialize the OpenAPI server if necessary
  */
 async function getApiServer() {
   if (!apiServer) {
@@ -68,7 +68,7 @@ async function getApiServer() {
   return apiServer
 }
 
-/** Format MCP → résumé (name + description + schema) */
+/** Format MCP → summary (name + description + schema) */
 export async function listTools() {
   try {
     const server = await getApiServer()
@@ -102,8 +102,8 @@ export async function listTools() {
 }
 
 /**
- * Exécute un tool à partir de son nom + arguments JSON-RPC.
- * @throws {Error} si le tool n'existe pas.
+ * Execute a tool from its name + JSON-RPC arguments.
+ * @throws {Error} if the tool doesn't exist.
  */
 export async function callTool(
   params: { name?: string; arguments?: any },
@@ -112,20 +112,20 @@ export async function callTool(
   const { name, arguments: args = {} } = params ?? {}
   if (!name) throw new Error('Missing "name"')
 
-  // 1. Vérifier d'abord les tools personnalisés
+  // 1. Check custom tools first
   const customTool = CUSTOM_TOOLS.find((t: any) => t.name === name)
   if (customTool) {
     return customTool.run(args, headers)
   }
 
-  // 2. Essayer les endpoints OpenAPI
+  // 2. Try OpenAPI endpoints
   try {
     const server = await getApiServer()
     if (!server) throw new Error('OpenAPI server not available')
     
     const result = await server.callTool({ name, arguments: args })
     
-    // Extraire le contenu de la réponse
+    // Extract content from response
     if (result.content && result.content.length > 0) {
       const firstContent = result.content[0]
       return firstContent.json ?? firstContent.text ?? firstContent
@@ -136,3 +136,6 @@ export async function callTool(
     throw new Error(`Unknown tool: ${name}`)
   }
 }
+
+// Export the buildOpenApiServer function for testing
+export { buildOpenApiServer }
