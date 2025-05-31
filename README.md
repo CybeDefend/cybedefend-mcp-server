@@ -225,18 +225,10 @@ The MCP server interfaces with the CybeDefend API v1.0, providing access to:
 - Vulnerability data retrieval
 - Real-time status monitoring
 
-For detailed API documentation, visit the [CybeDefend API Documentation](https://app-preprod.cybedefend.com/api-docs).
+For detailed API documentation, visit the [CybeDefend API Documentation](https://docs.cybedefend.com/alpha/api-reference/introduction).
 
 ## Support
 
 - **Email**: support@cybedefend.com
 - **Documentation**: [CybeDefend Docs](https://docs.cybedefend.com)
 - **Issues**: [GitHub Issues](https://github.com/cybedefend/mcp-server/issues)
-
-## License
-
-This project is licensed under the ISC License - see the LICENSE file for details.
-
----
-
-*Made with ❤️ by the CybeDefend Security Team*
