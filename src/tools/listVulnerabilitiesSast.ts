@@ -1,7 +1,7 @@
 // src/tools/listVulnerabilitiesSast.ts
 import axios from "axios";
 import { forwardAuth } from "../utils/forwardAuth.js";
-const API_BASE = process.env.API_BASE! || "https://api-preprod.cybedefend.com"
+const API_BASE = "https://api-preprod.cybedefend.com"
 
 export const listVulnerabilitiesSastTool = {
   name: "list_vulnerabilities_sast",
