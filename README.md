@@ -61,7 +61,7 @@ Replace the values in **bold**.
 
 ### 2.2 VS Code – MCP extension
 
-`mcp.json` (user or workspace) :
+`.vscode/mcp.json` (user or workspace) :
 
 ```jsonc
 "servers": {
@@ -84,9 +84,8 @@ Run “**MCP: Reload servers**” from the Command Palette.
 
 ```bash
 docker run --rm -i \
-  -e API_BASE=https://api-preprod.cybedefend.com \
-  -e CYBEDEFEND_API_KEY=cybe_******** \
-  ghcr.io/cybedefend/mcp-server:latest
+  -e CYBEDEFEND_API_KEY=cybe_*** \
+  ghcr.io/cybedefend/cybedefend-mcp-server:latest
 ```
 
 > The image is multi-arch (amd64 / arm64) and includes Node runtimes.

@@ -1,0 +1,19 @@
+# Build local
+docker build -t cybedefend/mcp-server:0.1.3 .
+
+# Auth
+echo $GHCR_PAT | docker login ghcr.io -u julienzammit --password-stdin
+
+# Retag
+docker tag cybedefend/mcp-server:0.1.3 \
+           ghcr.io/julienzammit/cybedefend-mcp-server:0.1.3
+
+# Push
+docker push ghcr.io/julienzammit/cybedefend-mcp-server:0.1.3
+
+ou 
+
+docker buildx build \
+  --platform linux/amd64 \
+  -t ghcr.io/<user>/cybedefend-mcp-server:0.1.3 \
+  --push .
