@@ -61,19 +61,21 @@ Replace the values in **bold**.
 
 ### 2.2 VS Code – MCP extension
 
-`settings.json` (user or workspace) :
+`mcp.json` (user or workspace) :
 
 ```jsonc
-"mcp.servers": {
-  "cybedefend": {
-    "command": "npx",
-    "args": ["-y", "@cybedefend/mcp-server"],
-    "env": {
-      "API_BASE": "https://api-preprod.cybedefend.com",
-      "CYBEDEFEND_API_KEY": "cybe_********"
+"servers": {
+    "cybedefend": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@cybedefend/mcp-server@latest"
+      ],
+      "env": {
+        "CYBEDEFEND_API_KEY": "cybe_****"
+      }
     }
   }
-}
 ```
 
 Run “**MCP: Reload servers**” from the Command Palette.
