@@ -1,12 +1,9 @@
 {
   "name": "@cybedefend/mcp-server",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "type": "module",
-  "bin": {
-    "cybedefend-mcp": "bin/cli.mjs"
-  },
   "scripts": {
     "build": "tsc",               
     "stdio": "node dist/index.js"
@@ -14,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/express": "^5.0.2",
     "@types/jest": "^29.5.14",
