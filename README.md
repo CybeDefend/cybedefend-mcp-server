@@ -93,7 +93,7 @@ docker run --rm -i \
 
 ---
 
-## 3 · Available tools (📦 v1.1.0)
+## 3 · Available tools
 
 | Category     | Tool name                   | What it returns                          |
 | ------------ | --------------------------- | ---------------------------------------- |
