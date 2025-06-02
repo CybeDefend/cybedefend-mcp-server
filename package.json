@@ -8,11 +8,8 @@
     "cybedefend-mcp": "bin/cli.mjs"
   },
   "scripts": {
-    "stdio:dev": "tsx src/stdio-server.ts",
-    "stdio": "node dist/stdio-server.js",
-    "build": "tsc",
-    "postbuild": "chmod +x bin/cli.mjs",
-    "test": "vitest run --coverage"
+    "build": "tsc",               
+    "stdio": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +27,6 @@
     "vitest": "^3.1.4"
   },
   "dependencies": {
-    "@ivotoby/openapi-mcp-server": "^1.6.0",
     "@modelcontextprotocol/sdk": "^1.12.1",
     "axios": "^1.9.0",
     "express": "^5.1.0",
