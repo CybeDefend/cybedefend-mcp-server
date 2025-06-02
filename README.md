@@ -1,22 +1,22 @@
 # CybeDefend MCP Server
 
-Un serveur MCP (Model Context Protocol) simple pour intégrer les fonctionnalités de sécurité CybeDefend dans vos assistants IA.
+A simple MCP (Model Context Protocol) server to integrate CybeDefend security features into your AI assistants.
 
 ## Overview
 
-Ce serveur MCP permet aux assistants IA d'interagir avec la plateforme de sécurité CybeDefend pour :
+This MCP server allows AI assistants to interact with the CybeDefend security platform to:
 
-- **Démarrer des scans de sécurité** : Upload de code et lancement d'analyses
-- **Suivre les scans** : Monitoring en temps réel des analyses en cours
-- **Récupérer les résultats** : Accès aux vulnérabilités détectées
+- **Start security scans**: Upload code and launch analyses
+- **Monitor scans**: Real-time monitoring of ongoing analyses
+- **Retrieve results**: Access detected vulnerabilities and detailed reports
 
 ## Installation
 
-### 1. Prérequis
+### 1. Prerequisites
 
-Récupérez votre clé API CybeDefend depuis votre compte.
+Get your CybeDefend API key from your account.
 
-### 2. Build du projet
+### 2. Build the project
 
 ```bash
 git clone https://github.com/cybedefend/mcp-server
@@ -25,9 +25,9 @@ npm install
 npm run build
 ```
 
-### 3. Configuration dans Cursor/Claude
+### 3. Configuration in Cursor/Claude
 
-Ajoutez cette configuration dans votre fichier `.cursor/mcp.json` :
+Add this configuration to your `.cursor/mcp.json` file:
 
 ```json
 {
@@ -37,7 +37,7 @@ Ajoutez cette configuration dans votre fichier `.cursor/mcp.json` :
       "args": ["/path/to/cybedefend-mcp-server/dist/index.js"],
       "workingDirectory": "/path/to/cybedefend-mcp-server",
       "env": {
-        "CYBEDEFEND_API_KEY": "votre_api_key_ici",
+        "CYBEDEFEND_API_KEY": "your_api_key_here",
         "API_BASE": "https://app-preprod.cybedefend.com"
       }
     }
@@ -45,54 +45,160 @@ Ajoutez cette configuration dans votre fichier `.cursor/mcp.json` :
 }
 ```
 
-## Outils disponibles
+> **Note**: Replace `/path/to/cybedefend-mcp-server` with the absolute path to your project folder.
 
-Le serveur MCP fournit actuellement 2 outils :
+## Available Tools
 
-### `start_scan`
-Lance un scan de sécurité en uploadant un fichier ZIP.
+The MCP server currently provides 10 tools:
 
-**Paramètres :**
-- `projectId` : ID du projet CybeDefend
-- `fileName` : Nom du fichier ZIP
-- `fileBufferBase64` : Contenu du fichier encodé en base64
+### Scan Management
 
-**Retourne :**
-- `success` : Statut du démarrage
-- `scanId` : ID du scan créé
-- `detectedLanguages` : Langages détectés dans le code
+#### `start_scan`
+Start a security scan by uploading a ZIP file.
 
-### `get_scan`
-Récupère l'état actuel d'un scan (progression, vulnérabilités...).
+**Parameters:**
+- `projectId`: CybeDefend project ID
+- `fileName`: ZIP file name
+- `fileBufferBase64`: File content encoded in base64
 
-**Paramètres :**
-- `projectId` : ID du projet
-- `scanId` : ID du scan
+**Returns:**
+- `success`: Start status
+- `scanId`: Created scan ID
+- `detectedLanguages`: Programming languages detected in the code
 
-**Retourne :**
-Les détails complets du scan incluant l'état, la progression et les vulnérabilités trouvées.
+#### `get_scan`
+Retrieve the current state of a scan (progress, vulnerabilities...).
 
-## Exemples d'utilisation
+**Parameters:**
+- `projectId`: Project ID
+- `scanId`: Scan ID
 
-### Démarrer un scan
+**Returns:**
+Complete scan details including state, progress, and vulnerabilities found.
+
+### Project Overview
+
+#### `get_project_overview`
+Get a security overview of a project (critical counts, etc.).
+
+**Parameters:**
+- `projectId`: Project ID
+
+**Returns:**
+Security overview with vulnerability counts by severity and type.
+
+### SAST (Static Application Security Testing)
+
+#### `list_vulnerabilities_sast`
+List SAST vulnerabilities of a project with optional filters.
+
+**Parameters:**
+- `projectId`: Project ID (required)
+- `severity`: Filter by severity (`critical`, `high`, `medium`, `low`)
+- `status`: Filter by status (`to_verify`, `not_exploitable`, `confirmed`, `resolved`, `ignored`, `proposed_not_exploitable`)
+- `language`: Filter by programming language
+- `page`: Page number (minimum 1)
+- `limit`: Results per page (1-500)
+
+#### `get_vulnerability_sast`
+Get detailed information about a specific SAST vulnerability.
+
+**Parameters:**
+- `projectId`: Project ID (required)
+- `vulnerabilityId`: Vulnerability ID (required)
+- `language`: Programming language (optional)
+
+### IaC (Infrastructure as Code)
+
+#### `list_vulnerabilities_iac`
+List IaC vulnerabilities of a project with optional filters.
+
+**Parameters:**
+- `projectId`: Project ID (required)
+- `severity`: Filter by severity (`critical`, `high`, `medium`, `low`)
+- `status`: Filter by status (`to_verify`, `not_exploitable`, `confirmed`, `resolved`, `ignored`, `proposed_not_exploitable`)
+- `language`: Filter by language
+- `page`: Page number (minimum 1)
+- `limit`: Results per page (1-500)
+
+#### `get_vulnerability_iac`
+Get detailed information about a specific IaC vulnerability.
+
+**Parameters:**
+- `projectId`: Project ID (required)
+- `vulnerabilityId`: Vulnerability ID (required)
+- `language`: Language (optional)
+
+### SCA (Software Composition Analysis)
+
+#### `list_vulnerabilities_sca`
+List SCA vulnerabilities of a project with optional filters.
+
+**Parameters:**
+- `projectId`: Project ID (required)
+- `severity`: Filter by severity (`critical`, `high`, `medium`, `low`)
+- `status`: Filter by status (`to_verify`, `not_exploitable`, `confirmed`, `resolved`, `ignored`, `proposed_not_exploitable`)
+- `language`: Filter by language
+- `page`: Page number (minimum 1)
+- `limit`: Results per page (1-500)
+
+#### `get_vulnerability_sca`
+Get detailed information about a specific SCA vulnerability.
+
+**Parameters:**
+- `projectId`: Project ID (required)
+- `vulnerabilityId`: Vulnerability ID (required)
+- `language`: Language (optional)
+
+#### `list_sca_packages`
+List all detected packages (SCA) for a project.
+
+**Parameters:**
+- `projectId`: Project ID (required)
+- `page`: Page number (minimum 1)
+- `limit`: Results per page (1-500)
+
+## Usage Examples
+
+### Starting a scan
 ```
-Lance un scan de sécurité pour le projet "abc123" avec le fichier ZIP que j'ai uploadé
+Start a security scan for project "abc123" with the ZIP file I uploaded
 ```
 
-### Vérifier le statut
+### Checking scan status
 ```
-Vérifie le statut du scan "def456" pour le projet "abc123"
+Check the status of scan "def456" for project "abc123"
+```
+
+### Getting project overview
+```
+Show me the security overview for project "abc123"
+```
+
+### Listing vulnerabilities
+```
+List all critical SAST vulnerabilities for project "abc123"
+```
+
+### Getting vulnerability details
+```
+Show me details of SAST vulnerability "vuln-456" in project "abc123"
+```
+
+### Listing packages
+```
+List all detected packages for project "abc123"
 ```
 
 ## Architecture
 
-Le serveur utilise le protocole STDIO pour communiquer avec les clients MCP. Il n'y a pas d'OpenAPI ni de serveur HTTP - tout passe par les entrées/sorties standard.
+The server uses the STDIO protocol to communicate with MCP clients. There's no OpenAPI or HTTP server - everything goes through standard input/output.
 
-Les outils sont définis manuellement dans le code source et utilisent l'API REST de CybeDefend pour exécuter les actions.
+Tools are manually defined in the source code and use CybeDefend's REST API to perform actions.
 
-## Développement
+## Development
 
-### Lancer en mode dev
+### Run in dev mode
 ```bash
 npm run build && node dist/index.js
 ```
@@ -104,4 +210,4 @@ npm test
 
 ## Support
 
-Pour toute question ou problème, contactez l'équipe CybeDefend.
+For any questions or issues, contact the CybeDefend team.

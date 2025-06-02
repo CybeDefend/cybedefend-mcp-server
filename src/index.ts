@@ -35,7 +35,7 @@ const CUSTOM_TOOLS = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Helper : convertit n’importe quel résultat → payload MCP « text »   */
+/* Helper : convert result to MCP text format */
 function toMcpText(result: unknown) {
     return [
         typeof result === "string"
@@ -45,7 +45,7 @@ function toMcpText(result: unknown) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 1. Création du serveur MCP                                          */
+/* 1. Create MCP Server                                          */
 const server = new Server(
     { name: "cybedefend-mcp", version: "1.0.0" },
     { capabilities: { tools: {} } },
