@@ -29,7 +29,7 @@ async function buildOpenApiServer(): Promise<any> {
     apiServer = new OpenAPIServer({
       name        : "cybedefend-api",
       version     : "1.0.0",
-      apiBaseUrl  : process.env.API_BASE_URL ?? process.env.API_BASE ?? "",
+      apiBaseUrl  : process.env.API_BASE ?? "",
       openApiSpec : spec,
       specInputMethod: "file",
       headers     : parseHeaders(process.env.API_HEADERS),

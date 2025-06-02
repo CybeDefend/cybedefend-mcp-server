@@ -17,7 +17,7 @@ export async function buildOpenApiServer(): Promise<OpenAPIServer> {
   const server = new OpenAPIServer({
     name: "cybedefend-api",
     version: "1.0.0",
-    apiBaseUrl: process.env.API_BASE_URL ?? process.env.API_BASE ?? "",
+    apiBaseUrl: process.env.API_BASE ?? "",
     openApiSpec: specPath,
     specInputMethod: "file",
     headers: {},

@@ -4,10 +4,7 @@ import { config } from 'dotenv'
 // Load test environment variables
 config({ path: '.env.test' })
 
-// Default configuration to avoid errors
+// Verify required environment variables are loaded
 if (!process.env.API_BASE) {
-  process.env.API_BASE = 'https://api.example.com'
-}
-if (!process.env.API_BASE_URL) {
-  process.env.API_BASE_URL = 'https://api.example.com'
+  throw new Error('Missing API_BASE in .env.test file.')
 }
