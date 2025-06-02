@@ -49,7 +49,7 @@ Replace the values in **bold**.
       "command": "npx",           // auto-installs or updates
       "args":   ["-y", "@cybedefend/mcp-server"],
       "env": {
-        "API_BASE": "https://api.cybedefend.com",      // or http://localhost:3000
+        "API_BASE": "https://api-preprod.cybedefend.com",      // or http://localhost:3000
         "CYBEDEFEND_API_KEY": "cybe_********"
       }
     }
@@ -69,7 +69,7 @@ Replace the values in **bold**.
     "command": "npx",
     "args": ["-y", "@cybedefend/mcp-server"],
     "env": {
-      "API_BASE": "https://api.cybedefend.com",
+      "API_BASE": "https://api-preprod.cybedefend.com",
       "CYBEDEFEND_API_KEY": "cybe_********"
     }
   }
@@ -82,7 +82,7 @@ Run “**MCP: Reload servers**” from the Command Palette.
 
 ```bash
 docker run --rm -i \
-  -e API_BASE=https://api.cybedefend.com \
+  -e API_BASE=https://api-preprod.cybedefend.com \
   -e CYBEDEFEND_API_KEY=cybe_******** \
   ghcr.io/cybedefend/mcp-server:latest
 ```
