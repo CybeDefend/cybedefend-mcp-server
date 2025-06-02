@@ -1,8 +1,10 @@
-FROM node:18-alpine
+# Dockerfile
+FROM node:20-alpine
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci --production
-COPY dist ./dist
-COPY .env .env
-EXPOSE 4001
-CMD ["node", "-r", "dotenv/config", "dist/server.js"]
+COPY . .
+
+RUN npm ci --omit dev && npm run build \
+    && npm prune --omit=dev
+
+ENTRYPOINT ["node", "dist/index.js"]

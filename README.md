@@ -1,213 +1,169 @@
 # CybeDefend MCP Server
 
-A simple MCP (Model Context Protocol) server to integrate CybeDefend security features into your AI assistants.
+**Secure-by-design companion for AI code assistants.**
+This MCP (Model-Context Protocol) server plugs your favourite LLM (Cursor, Claude, VS Code Copilot Chat…) into the CybeDefend platform.
 
-## Overview
+---
 
-This MCP server allows AI assistants to interact with the CybeDefend security platform to:
+## 🌟 What you get
 
-- **Start security scans**: Upload code and launch analyses
-- **Monitor scans**: Real-time monitoring of ongoing analyses
-- **Retrieve results**: Access detected vulnerabilities and detailed reports
+| Capability        | What the tool does                                      |
+| ----------------- | ------------------------------------------------------- |
+| **Scan launcher** | Upload a ZIP and start a full SAST / IaC / SCA analysis |
+| **Live tracking** | Poll progress, wait for completion                      |
+| **Rich results**  | Query vulnerabilities, packages & project overview      |
+| **Zero-setup**    | One command, no local API proxies, pure STDIO           |
 
-## Installation
+All endpoints are thin wrappers around CybeDefend’s REST API; no data is stored locally.
 
-### 1. Prerequisites
+---
 
-Get your CybeDefend API key from your account.
+## 1 · Quick start
 
-### 2. Build the project
+### 1.1 Prerequisites
+
+* Node ≥ 18
+* A **CybeDefend API key** with project-level access
+
+### 1.2 Install globally (optional)
 
 ```bash
-git clone https://github.com/cybedefend/mcp-server
-cd cybedefend-mcp-server
-npm install
-npm run build
+npm i -g @cybedefend/mcp-server      # always latest version
 ```
 
-### 3. Configuration in Cursor/Claude
+> **Tip :** You can also rely on `npx` (see below) – no global install needed.
 
-Add this configuration to your `.cursor/mcp.json` file:
+---
 
-```json
+## 2 · Using in your AI client
+
+Below are copy-paste snippets for the three most popular MCP clients.
+Replace the values in **bold**.
+
+### 2.1 Cursor / Claude Desktop (`~/.cursor/mcp.json`)
+
+```jsonc
 {
   "mcpServers": {
     "cybedefend": {
-      "command": "node",
-      "args": ["/path/to/cybedefend-mcp-server/dist/index.js"],
-      "workingDirectory": "/path/to/cybedefend-mcp-server",
+      "command": "npx",           // auto-installs or updates
+      "args":   ["-y", "@cybedefend/mcp-server"],
       "env": {
-        "CYBEDEFEND_API_KEY": "your_api_key_here",
-        "API_BASE": "https://app-preprod.cybedefend.com"
+        "API_BASE": "https://api.cybedefend.com",      // or http://localhost:3000
+        "CYBEDEFEND_API_KEY": "cybe_********"
       }
     }
   }
 }
 ```
 
-> **Note**: Replace `/path/to/cybedefend-mcp-server` with the absolute path to your project folder.
+*Need a specific version?* → `"args": ["@cybedefend/mcp-server@1.2.3"]`
 
-## Available Tools
+### 2.2 VS Code – MCP extension
 
-The MCP server currently provides 10 tools:
+`settings.json` (user or workspace) :
 
-### Scan Management
-
-#### `start_scan`
-Start a security scan by uploading a ZIP file.
-
-**Parameters:**
-- `projectId`: CybeDefend project ID
-- `fileName`: ZIP file name
-- `fileBufferBase64`: File content encoded in base64
-
-**Returns:**
-- `success`: Start status
-- `scanId`: Created scan ID
-- `detectedLanguages`: Programming languages detected in the code
-
-#### `get_scan`
-Retrieve the current state of a scan (progress, vulnerabilities...).
-
-**Parameters:**
-- `projectId`: Project ID
-- `scanId`: Scan ID
-
-**Returns:**
-Complete scan details including state, progress, and vulnerabilities found.
-
-### Project Overview
-
-#### `get_project_overview`
-Get a security overview of a project (critical counts, etc.).
-
-**Parameters:**
-- `projectId`: Project ID
-
-**Returns:**
-Security overview with vulnerability counts by severity and type.
-
-### SAST (Static Application Security Testing)
-
-#### `list_vulnerabilities_sast`
-List SAST vulnerabilities of a project with optional filters.
-
-**Parameters:**
-- `projectId`: Project ID (required)
-- `severity`: Filter by severity (`critical`, `high`, `medium`, `low`)
-- `status`: Filter by status (`to_verify`, `not_exploitable`, `confirmed`, `resolved`, `ignored`, `proposed_not_exploitable`)
-- `language`: Filter by programming language
-- `page`: Page number (minimum 1)
-- `limit`: Results per page (1-500)
-
-#### `get_vulnerability_sast`
-Get detailed information about a specific SAST vulnerability.
-
-**Parameters:**
-- `projectId`: Project ID (required)
-- `vulnerabilityId`: Vulnerability ID (required)
-- `language`: Programming language (optional)
-
-### IaC (Infrastructure as Code)
-
-#### `list_vulnerabilities_iac`
-List IaC vulnerabilities of a project with optional filters.
-
-**Parameters:**
-- `projectId`: Project ID (required)
-- `severity`: Filter by severity (`critical`, `high`, `medium`, `low`)
-- `status`: Filter by status (`to_verify`, `not_exploitable`, `confirmed`, `resolved`, `ignored`, `proposed_not_exploitable`)
-- `language`: Filter by language
-- `page`: Page number (minimum 1)
-- `limit`: Results per page (1-500)
-
-#### `get_vulnerability_iac`
-Get detailed information about a specific IaC vulnerability.
-
-**Parameters:**
-- `projectId`: Project ID (required)
-- `vulnerabilityId`: Vulnerability ID (required)
-- `language`: Language (optional)
-
-### SCA (Software Composition Analysis)
-
-#### `list_vulnerabilities_sca`
-List SCA vulnerabilities of a project with optional filters.
-
-**Parameters:**
-- `projectId`: Project ID (required)
-- `severity`: Filter by severity (`critical`, `high`, `medium`, `low`)
-- `status`: Filter by status (`to_verify`, `not_exploitable`, `confirmed`, `resolved`, `ignored`, `proposed_not_exploitable`)
-- `language`: Filter by language
-- `page`: Page number (minimum 1)
-- `limit`: Results per page (1-500)
-
-#### `get_vulnerability_sca`
-Get detailed information about a specific SCA vulnerability.
-
-**Parameters:**
-- `projectId`: Project ID (required)
-- `vulnerabilityId`: Vulnerability ID (required)
-- `language`: Language (optional)
-
-#### `list_sca_packages`
-List all detected packages (SCA) for a project.
-
-**Parameters:**
-- `projectId`: Project ID (required)
-- `page`: Page number (minimum 1)
-- `limit`: Results per page (1-500)
-
-## Usage Examples
-
-### Starting a scan
-```
-Start a security scan for project "abc123" with the ZIP file I uploaded
+```jsonc
+"mcp.servers": {
+  "cybedefend": {
+    "command": "npx",
+    "args": ["-y", "@cybedefend/mcp-server"],
+    "env": {
+      "API_BASE": "https://api.cybedefend.com",
+      "CYBEDEFEND_API_KEY": "cybe_********"
+    }
+  }
+}
 ```
 
-### Checking scan status
-```
-Check the status of scan "def456" for project "abc123"
-```
+Run “**MCP: Reload servers**” from the Command Palette.
 
-### Getting project overview
-```
-Show me the security overview for project "abc123"
-```
+### 2.3 Docker (air-gapped CI, etc.)
 
-### Listing vulnerabilities
-```
-List all critical SAST vulnerabilities for project "abc123"
-```
-
-### Getting vulnerability details
-```
-Show me details of SAST vulnerability "vuln-456" in project "abc123"
-```
-
-### Listing packages
-```
-List all detected packages for project "abc123"
-```
-
-## Architecture
-
-The server uses the STDIO protocol to communicate with MCP clients. There's no OpenAPI or HTTP server - everything goes through standard input/output.
-
-Tools are manually defined in the source code and use CybeDefend's REST API to perform actions.
-
-## Development
-
-### Run in dev mode
 ```bash
-npm run build && node dist/index.js
+docker run --rm -i \
+  -e API_BASE=https://api.cybedefend.com \
+  -e CYBEDEFEND_API_KEY=cybe_******** \
+  ghcr.io/cybedefend/mcp-server:latest
+```
+
+> The image is multi-arch (amd64 / arm64) and includes Node runtimes.
+
+---
+
+## 3 · Available tools (📦 v1.1.0)
+
+| Category     | Tool name                   | What it returns                          |
+| ------------ | --------------------------- | ---------------------------------------- |
+| **Scan**     | `start_scan`                | `{ success, scanId, detectedLanguages }` |
+|              | `get_scan`                  | Current state, % progress, counts        |
+| **Overview** | `get_project_overview`      | Critical/high/… per scanner              |
+| **SAST**     | `list_vulnerabilities_sast` | Paginated list with filters              |
+|              | `get_vulnerability_sast`    | Single finding, code snippet             |
+| **IaC**      | `list_vulnerabilities_iac`  | 〃                                        |
+|              | `get_vulnerability_iac`     | 〃                                        |
+| **SCA**      | `list_vulnerabilities_sca`  | 〃                                        |
+|              | `get_vulnerability_sca`     | 〃                                        |
+|              | `list_sca_packages`         | All third-party packages                 |
+
+Schema for every tool is embedded; assistants receive it automatically.
+
+---
+
+## 4 · Typical chat prompts
+
+| Prompt                                               | Internally calls            |
+| ---------------------------------------------------- | --------------------------- |
+| “Scan my repo **frontend.zip** in project **1234**.” | `start_scan`                |
+| “How far along is scan **abcd-efgh** ?”              | `get_scan`                  |
+| “Show critical SAST bugs in Java.”                   | `list_vulnerabilities_sast` |
+| “Details of vuln **c0ffee**.”                        | `get_vulnerability_sast`    |
+
+*(Cursor / Claude will pick the tool + arguments – no manual JSON needed.)*
+
+---
+
+## 5 · Local development
+
+```bash
+git clone https://github.com/cybedefend/mcp-server
+cd mcp-server
+npm i
+npm run build              # TS → dist/
+node dist/index.js         # runs on STDIO
 ```
 
 ### Tests
+
 ```bash
-npm test
+npm t           # Vitest + coverage
 ```
 
-## Support
+---
 
-For any questions or issues, contact the CybeDefend team.
+## 6 · Publishing a new version (maintainers)
+
+```bash
+# ensure dist/ is up-to-date
+npm run build
+
+# bump + publish – prepare script rebuilds automatically
+npm version patch
+npm publish --access public
+```
+
+Check before shipping:
+
+```bash
+npm pack --dry-run | grep dist/index.js   # must be present
+```
+
+---
+
+## 7 · Support & feedback
+
+* **Docs** : [https://docs.cybedefend.com](https://docs.cybedefend.com)
+* **Issues** / PRs : [https://github.com/CybeDefend/cybedefend-mcp-server](https://github.com/CybeDefend/cybedefend-mcp-server)
+* **Email** : [support@cybedefend.com](mailto:support@cybedefend.com)
+
+> Pull-requests welcome — especially for new tools or language bindings!

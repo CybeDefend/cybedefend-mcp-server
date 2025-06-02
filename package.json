@@ -1,13 +1,21 @@
 {
   "name": "@cybedefend/mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "bin": {
+    "cybedefend-mcp": "dist/index.js"
+  },
   "type": "module",
   "scripts": {
-    "build": "tsc",               
+    "build": "tsc",
+    "prepare": "npm run build",
     "stdio": "node dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
