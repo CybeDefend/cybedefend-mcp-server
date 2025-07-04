@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO Before running :
-# - export GHCR_PAT="ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-# - export GHCR_USER="julienzammit" # optional, default is julienzammit
-
 set -euo pipefail
 
 # -----------------------------------------------------------------------------
@@ -23,8 +19,10 @@ BUILD_CONTEXT="."
 # -----------------------------------------------------------------------------
 # - Vous devez exportez auparavant votre PAT GitHub (avec scope “packages: write”)
 #   dans l’environnement, par exemple :
-#
-#     export GHCR_PAT="ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+# - export GHCR_PAT="ghp_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+# - export GHCR_USER="julienzammit" # optional, default is julienzammit
+
 #
 # - Si vous poussez dans une organisation (ici “cybedefend”), 
 #   le PAT doit être fine‐grained (Resource owner = cybedefend) 

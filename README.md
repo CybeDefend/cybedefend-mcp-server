@@ -49,7 +49,7 @@ Replace the values in **bold**.
       "command": "npx",           // auto-installs or updates
       "args":   ["-y", "@cybedefend/mcp-server"],
       "env": {
-        "API_BASE": "https://api-preprod.cybedefend.com",      // or http://localhost:3000
+        "API_BASE": "https://api-us.cybedefend.com",      // or http://localhost:3000
         "CYBEDEFEND_API_KEY": "cybe_********"
       }
     }
