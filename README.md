@@ -9,7 +9,7 @@ This MCP (Model-Context Protocol) server plugs your favourite LLM (Cursor, Claud
 
 | Benefit                     | What it enables in your IDE                                                     |
 | --------------------------- | -------------------------------------------------------------------------------- |
-| **Direct vulnerability access** | Fetch SAST, IaC, and SCA findings just by providing your projectId.             |
+| **Direct vulnerability access** | Fetch SAST, IaC, and SCA findings using your default project (CYBEDEFEND_PROJECT_ID). |
 | **In-IDE remediation**      | Jump to the exact file/line with code snippets so your AI assistant can fix inline. |
 | **Always up-to-date**       | Pull the latest results and statuses from CybeDefend as scans complete.          |
 | **Zero-setup**              | One command, no local API proxies, pure STDIO.                                   |
@@ -47,6 +47,11 @@ Region selection
   2. REGION – short code: "eu" or "us". Defaults to "us" if omitted or unknown.
   If both are set, API_BASE wins.
 
+Default project (recommended)
+
+- Set CYBEDEFEND_PROJECT_ID (your project UUID) so you never have to pass projectId to tools.
+- Precedence: a projectId explicitly provided to a tool overrides CYBEDEFEND_PROJECT_ID.
+
 ### 2.1 Cursor / Claude Desktop (`~/.cursor/mcp.json`)
 
 ```jsonc
@@ -61,6 +66,9 @@ Region selection
 
         // Option B – region selector (eu | us), defaults to "us"
         "REGION": "us",
+
+  // Default projectId used by all tools
+  "CYBEDEFEND_PROJECT_ID": "proj_********",
 
         "CYBEDEFEND_API_KEY": "cybe_********"
       }
@@ -86,6 +94,7 @@ Region selection
       "env": {
         // "API_BASE": "https://api-eu.cybedefend.com",
         "REGION": "us",
+  "CYBEDEFEND_PROJECT_ID": "proj_****",
         "CYBEDEFEND_API_KEY": "cybe_****"
       }
     }
@@ -101,6 +110,8 @@ docker run --rm -i \
   -e CYBEDEFEND_API_KEY=cybe_*** \
   # Optional: pick region (eu | us) or set API_BASE explicitly
   -e REGION=us \
+  # Default projectId used by all tools
+  -e CYBEDEFEND_PROJECT_ID=proj_*** \
   ghcr.io/cybedefend/cybedefend-mcp-server:latest
 ```
 
@@ -112,7 +123,8 @@ docker run --rm -i \
 
 | Category     | Tool name                   | What it returns                          |
 | ------------ | --------------------------- | ---------------------------------------- |
-| **Scan**     | `get_scan`                  | Current state, % progress, counts        |
+| **Scan**     | `start_scan`                | `{ success, scanId, detectedLanguages }` |
+|              | `get_scan`                  | Current state, % progress, counts        |
 | **Overview** | `get_project_overview`      | Critical/high/… per scanner              |
 | **SAST**     | `list_vulnerabilities_sast` | Paginated list with filters              |
 |              | `get_vulnerability_sast`    | Single finding, code snippet             |
@@ -128,9 +140,11 @@ Schema for every tool is embedded; assistants receive it automatically.
 
 ## 4 · Typical chat prompts
 
+Assumes CYBEDEFEND_PROJECT_ID is set; you don't need to pass projectId in prompts.
+
 | Prompt                                               | Internally calls            |
 | ---------------------------------------------------- | --------------------------- |
-| “Scan my repo **frontend.zip** in project **1234**.” | `start_scan`                |
+| “Scan my repo **frontend.zip**.”                      | `start_scan`                |
 | “How far along is scan **abcd-efgh** ?”              | `get_scan`                  |
 | “Show critical SAST bugs in Java.”                   | `list_vulnerabilities_sast` |
 | “Details of vuln **c0ffee**.”                        | `get_vulnerability_sast`    |
