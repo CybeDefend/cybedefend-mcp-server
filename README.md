@@ -7,12 +7,12 @@ This MCP (Model-Context Protocol) server plugs your favourite LLM (Cursor, Claud
 
 ## 🌟 What you get
 
-| Capability        | What the tool does                                      |
-| ----------------- | ------------------------------------------------------- |
-| **Scan launcher** | Upload a ZIP and start a full SAST / IaC / SCA analysis |
-| **Live tracking** | Poll progress, wait for completion                      |
-| **Rich results**  | Query vulnerabilities, packages & project overview      |
-| **Zero-setup**    | One command, no local API proxies, pure STDIO           |
+| Benefit                     | What it enables in your IDE                                                     |
+| --------------------------- | -------------------------------------------------------------------------------- |
+| **Direct vulnerability access** | Fetch SAST, IaC, and SCA findings just by providing your projectId.             |
+| **In-IDE remediation**      | Jump to the exact file/line with code snippets so your AI assistant can fix inline. |
+| **Always up-to-date**       | Pull the latest results and statuses from CybeDefend as scans complete.          |
+| **Zero-setup**              | One command, no local API proxies, pure STDIO.                                   |
 
 All endpoints are thin wrappers around CybeDefend’s REST API; no data is stored locally.
 
