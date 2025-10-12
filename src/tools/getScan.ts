@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { forwardAuth } from '../utils/forwardAuth.js'
-
-const API_BASE = process.env.API_BASE!
+import { API_BASE } from '../utils/apiBase.js'
 
 export const getScanTool = {
   name: 'get_scan',
@@ -10,7 +9,7 @@ export const getScanTool = {
     type: 'object',
     properties: {
       projectId: { type: 'string' },
-      scanId:    { type: 'string' }
+      scanId: { type: 'string' }
     },
     required: ['projectId', 'scanId']
   },

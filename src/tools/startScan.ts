@@ -2,7 +2,7 @@ import axios from 'axios'
 import FormData from 'form-data'
 import { forwardAuth } from '../utils/forwardAuth.js'
 
-const API_BASE = process.env.API_BASE!
+import { API_BASE } from '../utils/apiBase.js'
 
 export const startScanTool = {
   name: 'start_scan',
@@ -11,8 +11,8 @@ export const startScanTool = {
   inputSchema: {
     type: 'object',
     properties: {
-      projectId:        { type: 'string', description: 'Project UUID' },
-      fileName:         { type: 'string' },
+      projectId: { type: 'string', description: 'Project UUID' },
+      fileName: { type: 'string' },
       fileBufferBase64: { type: 'string' }
     },
     required: ['projectId', 'fileName', 'fileBufferBase64']
@@ -23,7 +23,7 @@ export const startScanTool = {
     const { projectId, fileName, fileBufferBase64 } = params
 
     const buffer = Buffer.from(fileBufferBase64, 'base64')
-    const form   = new FormData()
+    const form = new FormData()
     form.append('file', buffer, fileName)
 
     const res = await axios.post(

@@ -1,7 +1,7 @@
 // src/tools/listScaPackages.ts
 import axios from "axios";
 import { forwardAuth } from "../utils/forwardAuth.js";
-const API_BASE = process.env.API_BASE! || "https://api-us.cybedefend.com"
+import { API_BASE } from "../utils/apiBase.js";
 
 export const listScaPackagesTool = {
   name: "list_sca_packages",

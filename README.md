@@ -40,6 +40,13 @@ npm i -g @cybedefend/mcp-server      # always latest version
 Below are copy-paste snippets for the three most popular MCP clients.
 Replace the values in **bold**.
 
+Region selection
+
+- You can point the server to the right region in two ways, in order of precedence:
+  1. API_BASE – full URL to the API (e.g. https://api-eu.cybedefend.com)
+  2. REGION – short code: "eu" or "us". Defaults to "us" if omitted or unknown.
+  If both are set, API_BASE wins.
+
 ### 2.1 Cursor / Claude Desktop (`~/.cursor/mcp.json`)
 
 ```jsonc
@@ -49,7 +56,12 @@ Replace the values in **bold**.
       "command": "npx",           // auto-installs or updates
       "args":   ["-y", "@cybedefend/mcp-server"],
       "env": {
-        "API_BASE": "https://api-us.cybedefend.com",      // or http://localhost:3000
+        // Option A – explicit API base (highest precedence)
+        // "API_BASE": "https://api-eu.cybedefend.com",
+
+        // Option B – region selector (eu | us), defaults to "us"
+        "REGION": "us",
+
         "CYBEDEFEND_API_KEY": "cybe_********"
       }
     }
@@ -72,6 +84,8 @@ Replace the values in **bold**.
         "@cybedefend/mcp-server@latest"
       ],
       "env": {
+        // "API_BASE": "https://api-eu.cybedefend.com",
+        "REGION": "us",
         "CYBEDEFEND_API_KEY": "cybe_****"
       }
     }
@@ -85,6 +99,8 @@ Run “**MCP: Reload servers**” from the Command Palette.
 ```bash
 docker run --rm -i \
   -e CYBEDEFEND_API_KEY=cybe_*** \
+  # Optional: pick region (eu | us) or set API_BASE explicitly
+  -e REGION=us \
   ghcr.io/cybedefend/cybedefend-mcp-server:latest
 ```
 
