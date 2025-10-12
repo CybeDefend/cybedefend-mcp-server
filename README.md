@@ -112,8 +112,7 @@ docker run --rm -i \
 
 | Category     | Tool name                   | What it returns                          |
 | ------------ | --------------------------- | ---------------------------------------- |
-| **Scan**     | `start_scan`                | `{ success, scanId, detectedLanguages }` |
-|              | `get_scan`                  | Current state, % progress, counts        |
+| **Scan**     | `get_scan`                  | Current state, % progress, counts        |
 | **Overview** | `get_project_overview`      | Critical/high/… per scanner              |
 | **SAST**     | `list_vulnerabilities_sast` | Paginated list with filters              |
 |              | `get_vulnerability_sast`    | Single finding, code snippet             |
