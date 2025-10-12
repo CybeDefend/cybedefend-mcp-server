@@ -6,7 +6,7 @@ import { resolveProjectId } from "../utils/projectId.js";
 
 export const listScaPackagesTool = {
   name: "list_sca_packages",
-  description: "List all detected packages (SCA) for a project.",
+  description: "List all detected packages (SCA) for a project. If projectId is omitted, uses CYBEDEFEND_PROJECT_ID from your MCP config (e.g., VS Code .vscode/mcp.json env).",
   inputSchema: {
     type: "object",
     properties: {

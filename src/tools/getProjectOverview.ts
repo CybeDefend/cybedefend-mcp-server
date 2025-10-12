@@ -6,7 +6,7 @@ import { resolveProjectId } from "../utils/projectId.js";
 
 export const getProjectOverviewTool = {
   name: "get_project_overview",
-  description: "Returns a security overview of a project (critical counts, etc.)",
+  description: "Returns a security overview of a project (critical counts, etc.). If projectId is omitted, uses CYBEDEFEND_PROJECT_ID from your MCP config (e.g., VS Code .vscode/mcp.json env).",
   inputSchema: {
     type: "object",
     properties: { projectId: { type: "string", description: "Optional. Defaults to CYBEDEFEND_PROJECT_ID" } },

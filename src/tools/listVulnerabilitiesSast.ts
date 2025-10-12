@@ -6,7 +6,7 @@ import { resolveProjectId } from "../utils/projectId.js";
 
 export const listVulnerabilitiesSastTool = {
   name: "list_vulnerabilities_sast",
-  description: "List SAST vulnerabilities of a project; accepts optional filters.",
+  description: "List SAST vulnerabilities of a project; accepts optional filters. If projectId is omitted, uses CYBEDEFEND_PROJECT_ID from your MCP config (e.g., VS Code .vscode/mcp.json env).",
   inputSchema: {
     type: "object",
     properties: {

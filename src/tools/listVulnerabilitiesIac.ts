@@ -6,7 +6,7 @@ import { resolveProjectId } from "../utils/projectId.js";
 
 export const listVulnerabilitiesIacTool = {
   name: "list_vulnerabilities_iac",
-  description: "List IAC vulnerabilities of a project; accepts optional filters.",
+  description: "List IAC vulnerabilities of a project; accepts optional filters. If projectId is omitted, uses CYBEDEFEND_PROJECT_ID from your MCP config (e.g., VS Code .vscode/mcp.json env).",
   inputSchema: {
     type: "object",
     properties: {

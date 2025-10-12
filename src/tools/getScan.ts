@@ -5,7 +5,7 @@ import { resolveProjectId } from '../utils/projectId.js'
 
 export const getScanTool = {
   name: 'get_scan',
-  description: 'Returns the current state of a scan (progress, vulnerabilities…).',
+  description: 'Returns the current state of a scan (progress, vulnerabilities…). If projectId is omitted, uses CYBEDEFEND_PROJECT_ID from your MCP config (e.g., VS Code .vscode/mcp.json env).',
   inputSchema: {
     type: 'object',
     properties: {
