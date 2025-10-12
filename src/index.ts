@@ -10,7 +10,6 @@ import {
 
 import { log } from "./utils/logger.js";
 
-import { startScanTool } from "./tools/startScan.js";
 import { getScanTool } from "./tools/getScan.js";
 import { getProjectOverviewTool } from "./tools/getProjectOverview.js";
 import { listVulnerabilitiesSastTool } from "./tools/listVulnerabilitiesSast.js";
@@ -22,7 +21,6 @@ import { getVulnerabilityIacTool } from "./tools/getVulnerabilityIac.js";
 import { getVulnerabilityScaTool } from "./tools/getVulnerabilitySca.js";
 
 const CUSTOM_TOOLS = [
-    startScanTool,
     getScanTool,
     getProjectOverviewTool,
     listVulnerabilitiesSastTool,

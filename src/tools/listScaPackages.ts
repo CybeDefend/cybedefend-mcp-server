@@ -16,9 +16,8 @@ export const listScaPackagesTool = {
     required: ["projectId"]
   },
   async run(params: any, clientHeaders: Record<string, string | undefined>) {
-    const { projectId, ...query } = params;
-    const qs = new URLSearchParams(Object.entries(query).filter(([, v]) => v != null).map(([k, v]) => [k, String(v)]));
-    const res = await axios.get(`${API_BASE}/project/${projectId}/results/sca/packages?${qs}`, {
+    const { projectId } = params;
+    const res = await axios.get(`${API_BASE}/project/${projectId}/results/sca/packages`, {
       headers: { ...forwardAuth(clientHeaders), "User-Agent": "cybedefend-mcp/1.0" },
       timeout: 15_000,
     });
