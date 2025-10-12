@@ -5,11 +5,11 @@ set -euo pipefail
 # -----------------------------------------------------------------------------
 # ⚙️  CONFIGURATION
 # -----------------------------------------------------------------------------
-# Nom de l’image locale résultante (par exemple : cybedefend/mcp-server:0.1.3)
-IMAGE_LOCAL="cybedefend/mcp-server:0.1.3"
+# Nom de l’image locale résultante (par exemple : cybedefend/mcp-server:0.1.4)
+IMAGE_LOCAL="cybedefend/mcp-server:0.1.4"
 
 # Nom complet sur GHCR (organization “cybedefend” dans cet exemple) :
-IMAGE_GHCR="ghcr.io/cybedefend/cybedefend-mcp-server:0.1.3"
+IMAGE_GHCR="ghcr.io/cybedefend/cybedefend-mcp-server:0.1.4"
 
 # Chemin vers le Dockerfile (par défaut, le dossier courant)
 BUILD_CONTEXT="."
