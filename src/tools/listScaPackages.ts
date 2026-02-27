@@ -6,21 +6,46 @@ import { resolveProjectId } from "../utils/projectId.js";
 
 export const listScaPackagesTool = {
   name: "list_sca_packages",
-  description: "List all detected packages (SCA) for a project. If projectId is omitted, uses CYBEDEFEND_PROJECT_ID from your MCP config (e.g., VS Code .vscode/mcp.json env).",
+  description:
+    "List all detected packages (SCA) for a project. If projectId is omitted, uses CYBEDEFEND_PROJECT_ID.",
   inputSchema: {
     type: "object",
     properties: {
-      projectId: { type: "string", description: "Optional. Defaults to CYBEDEFEND_PROJECT_ID" },
-      page: { type: "number", minimum: 1 },
-      limit: { type: "number", minimum: 1, maximum: 500 }
+      projectId: { type: "string", description: "Optional. Defaults to CYBEDEFEND_PROJECT_ID." },
+      severity: {
+        type: "array",
+        items: { type: "string", enum: ["critical", "high", "medium", "low"] },
+        description: "Filter by severity levels.",
+      },
+      status: {
+        type: "array",
+        items: { type: "string", enum: ["to_verify", "not_exploitable", "proposed_not_exploitable", "resolved", "confirmed", "ignored"] },
+        description: "Filter by statuses.",
+      },
+      priority: {
+        type: "array",
+        items: { type: "string", enum: ["critical_urgent", "urgent", "normal", "low", "very_low"] },
+        description: "Filter by priority levels.",
+      },
+      packageType: {
+        type: "array",
+        items: { type: "string", enum: ["direct", "dev", "transitive"] },
+        description: "Filter by package dependency type.",
+      },
+      searchQuery: { type: "string", description: "Full-text search query." },
+      branch: { type: "string", description: "Filter by branch name." },
+      sort: { type: "string", description: "Sort field." },
+      order: { type: "string", enum: ["asc", "desc"], description: "Sort order." },
+      page: { type: "number", minimum: 1, description: "Page number." },
+      limit: { type: "number", minimum: 10, maximum: 100, description: "Page size (10-100)." },
     },
-
   },
   async run(params: any, clientHeaders: Record<string, string | undefined>) {
-    const { projectId } = params;
-    const pid = resolveProjectId(projectId)
+    const { projectId, ...query } = params;
+    const pid = resolveProjectId(projectId);
     const res = await axios.get(`${API_BASE}/project/${pid}/results/sca/packages`, {
       headers: { ...forwardAuth(clientHeaders), "User-Agent": "cybedefend-mcp/1.0" },
+      params: query,
       timeout: 15_000,
     });
     return res.data;

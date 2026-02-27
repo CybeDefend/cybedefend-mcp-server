@@ -10,26 +10,72 @@ import {
 
 import { log } from "./utils/logger.js";
 
-import { getScanTool } from "./tools/getScan.js";
+// ── Overview & branches ──
 import { getProjectOverviewTool } from "./tools/getProjectOverview.js";
+import { getBranchesTool } from "./tools/getBranches.js";
+
+// ── SAST ──
 import { listVulnerabilitiesSastTool } from "./tools/listVulnerabilitiesSast.js";
-import { listVulnerabilitiesIacTool } from "./tools/listVulnerabilitiesIac.js";
-import { listVulnerabilitiesScaTool } from "./tools/listVulnerabilitiesSca.js";
-import { listScaPackagesTool } from "./tools/listScaPackages.js";
 import { getVulnerabilitySastTool } from "./tools/getVulnerabilitySast.js";
-import { getVulnerabilityIacTool } from "./tools/getVulnerabilityIac.js";
+
+// ── SCA ──
+import { listVulnerabilitiesScaTool } from "./tools/listVulnerabilitiesSca.js";
 import { getVulnerabilityScaTool } from "./tools/getVulnerabilitySca.js";
+import { listScaPackagesTool } from "./tools/listScaPackages.js";
+
+// ── IAC ──
+import { listVulnerabilitiesIacTool } from "./tools/listVulnerabilitiesIac.js";
+import { getVulnerabilityIacTool } from "./tools/getVulnerabilityIac.js";
+
+// ── CI/CD ──
+import { listVulnerabilitiesCicdTool } from "./tools/listVulnerabilitiesCicd.js";
+import { getVulnerabilityCicdTool } from "./tools/getVulnerabilityCicd.js";
+
+// ── Secret ──
+import { listVulnerabilitiesSecretTool } from "./tools/listVulnerabilitiesSecret.js";
+import { getVulnerabilitySecretTool } from "./tools/getVulnerabilitySecret.js";
+
+// ── Container ──
+import { listVulnerabilitiesContainerTool } from "./tools/listVulnerabilitiesContainer.js";
+import { getVulnerabilityContainerTool } from "./tools/getVulnerabilityContainer.js";
+
+// ── Cross-type actions ──
+import { updateVulnerabilityTool } from "./tools/updateVulnerability.js";
+import { getSimilarVulnerabilitiesTool } from "./tools/getSimilarVulnerabilities.js";
 
 const CUSTOM_TOOLS = [
-    getScanTool,
+    // Overview & branches
     getProjectOverviewTool,
+    getBranchesTool,
+
+    // SAST
     listVulnerabilitiesSastTool,
-    listVulnerabilitiesIacTool,
-    listVulnerabilitiesScaTool,
-    listScaPackagesTool,
     getVulnerabilitySastTool,
-    getVulnerabilityIacTool,
+
+    // SCA
+    listVulnerabilitiesScaTool,
     getVulnerabilityScaTool,
+    listScaPackagesTool,
+
+    // IAC
+    listVulnerabilitiesIacTool,
+    getVulnerabilityIacTool,
+
+    // CI/CD
+    listVulnerabilitiesCicdTool,
+    getVulnerabilityCicdTool,
+
+    // Secret
+    listVulnerabilitiesSecretTool,
+    getVulnerabilitySecretTool,
+
+    // Container
+    listVulnerabilitiesContainerTool,
+    getVulnerabilityContainerTool,
+
+    // Cross-type actions
+    updateVulnerabilityTool,
+    getSimilarVulnerabilitiesTool,
 ];
 
 /* ------------------------------------------------------------------ */

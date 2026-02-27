@@ -6,15 +6,25 @@ import { resolveProjectId } from "../utils/projectId.js";
 
 export const getProjectOverviewTool = {
   name: "get_project_overview",
-  description: "Returns a security overview of a project (critical counts, etc.). If projectId is omitted, uses CYBEDEFEND_PROJECT_ID from your MCP config (e.g., VS Code .vscode/mcp.json env).",
+  description:
+    "Returns a security overview of a project (severity counts, trends per scanner). If projectId is omitted, uses CYBEDEFEND_PROJECT_ID.",
   inputSchema: {
     type: "object",
-    properties: { projectId: { type: "string", description: "Optional. Defaults to CYBEDEFEND_PROJECT_ID" } },
+    properties: {
+      projectId: { type: "string", description: "Optional. Defaults to CYBEDEFEND_PROJECT_ID." },
+      branches: {
+        type: "array",
+        items: { type: "string" },
+        description: "Optional. Filter by branch names.",
+      },
+    },
   },
-  async run({ projectId }: any, clientHeaders: Record<string, string | undefined>) {
-    const pid = resolveProjectId(projectId)
+  async run(params: any, clientHeaders: Record<string, string | undefined>) {
+    const { projectId, branches } = params;
+    const pid = resolveProjectId(projectId);
     const res = await axios.get(`${API_BASE}/project/${pid}/results/overview`, {
       headers: { ...forwardAuth(clientHeaders), "User-Agent": "cybedefend-mcp/1.0" },
+      params: branches?.length ? { branches: branches.join(",") } : undefined,
       timeout: 15_000,
     });
     return res.data;

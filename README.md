@@ -121,17 +121,25 @@ docker run --rm -i \
 
 ## 3 · Available tools
 
-| Category     | Tool name                   | What it returns                          |
-| ------------ | --------------------------- | ---------------------------------------- |
-|  **Scan**            | `get_scan`                  | Current state, % progress, counts        |
-| **Overview** | `get_project_overview`      | Critical/high/… per scanner              |
-| **SAST**     | `list_vulnerabilities_sast` | Paginated list with filters              |
-|              | `get_vulnerability_sast`    | Single finding, code snippet             |
-| **IaC**      | `list_vulnerabilities_iac`  | 〃                                        |
-|              | `get_vulnerability_iac`     | 〃                                        |
-| **SCA**      | `list_vulnerabilities_sca`  | 〃                                        |
-|              | `get_vulnerability_sca`     | 〃                                        |
-|              | `list_sca_packages`         | All third-party packages                 |
+| Category      | Tool name                       | What it returns                                    |
+| ------------- | ------------------------------- | -------------------------------------------------- |
+| **Overview**  | `get_project_overview`          | Severity counts per scanner, trends                |
+|               | `get_branches`                  | All distinct branches from detections              |
+| **SAST**      | `list_vulnerabilities_sast`     | Paginated list with filters                        |
+|               | `get_vulnerability_sast`        | Single finding, code snippet                       |
+| **SCA**       | `list_vulnerabilities_sca`      | Paginated list with filters                        |
+|               | `get_vulnerability_sca`         | Single SCA finding                                 |
+|               | `list_sca_packages`             | All third-party packages                           |
+| **IAC**       | `list_vulnerabilities_iac`      | Paginated list with filters                        |
+|               | `get_vulnerability_iac`         | Single IAC finding                                 |
+| **CI/CD**     | `list_vulnerabilities_cicd`     | Paginated list with filters                        |
+|               | `get_vulnerability_cicd`        | Single CI/CD finding                               |
+| **Secret**    | `list_vulnerabilities_secret`   | Paginated list with filters                        |
+|               | `get_vulnerability_secret`      | Single secret finding                              |
+| **Container** | `list_vulnerabilities_container`| Paginated list with filters                        |
+|               | `get_vulnerability_container`   | Single container finding                           |
+| **Actions**   | `update_vulnerability`          | Update status / priority / comment                 |
+|               | `get_similar_vulnerabilities`   | Vulnerability with similar occurrences             |
 
 Schema for every tool is embedded; assistants receive it automatically.
 
