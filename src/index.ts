@@ -117,6 +117,24 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
         return { content: toMcpText(result) };
     } catch (e: any) {
         log.error("Tool error:", e);
+        // Return API errors as content so the LLM can reason about them
+        if (e.response) {
+            const status = e.response.status;
+            const data = e.response.data;
+            const detail = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+            return {
+                content: [{ type: "text" as const, text: `API error ${status}: ${detail}` }],
+                isError: true,
+            };
+        }
+
+        // Network / timeout errors
+        if (e.code === "ECONNREFUSED" || e.code === "ETIMEDOUT" || e.code === "ENOTFOUND") {
+            return {
+                content: [{ type: "text" as const, text: `Network error: ${e.message}` }],
+                isError: true,
+            };
+        }
         throw new McpError(ErrorCode.InternalError, e.message ?? "internal_error");
     }
 });
